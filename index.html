@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/styles.css">
+  <script src="_ds/grow-money-mindset-design-system-5cab659f-67e0-4e62-a824-23c766252cf0/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: #0A0C08; }
+    a { color: var(--accent-ink); font-weight: 700; text-decoration: none; }
+    a:hover { opacity: .85; }
+    @keyframes gmrise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  </style>
+</helmet>
+<div style="height: 100vh; display: flex; flex-direction: column; background: var(--bg0); color: var(--txt); font-family: var(--font-ui); overflow: hidden;">
+  <div style="height: 60px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 18px; background: var(--bg1); border-bottom: 1px solid var(--line);">
+    <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.Logo" size="30" hint-size="150px,32px"></x-import>
+    <div style="width: 1px; height: 22px; background: var(--line);"></div>
+    <div style="font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ topbarTitle }}</div>
+    <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 12px; font-weight: 600; color: var(--txt2);">Reveal all</span>
+      <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.Switch" on="{{ allOn }}" on-change="{{ toggleAll }}" label="Reveal all" hint-size="38px,22px"></x-import>
+    </div>
+  </div>
+  <sc-if value="{{ showChips }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; gap: 7px; overflow-x: auto; padding: 10px 14px; background: var(--bg1); border-bottom: 1px solid var(--line); flex-shrink: 0;">
+      <sc-for list="{{ navChips }}" as="ch" hint-placeholder-count="6">
+        <button onClick="{{ ch.onSelect }}" style="flex-shrink: 0; padding: 11px 14px; border-radius: 999px; font-family: var(--font-ui); font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; background: {{ ch.bg }}; color: {{ ch.color }}; border: 1px solid {{ ch.border }};">{{ ch.label }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+  <div style="display: flex; flex: 1; min-height: 0;">
+    <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ true }}">
+    <div style="width: 244px; flex-shrink: 0; background: var(--bg1); border-right: 1px solid var(--line); padding: 16px 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px;">
+      <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--txt3); padding: 0 12px 8px;">Start here</div>
+      <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.NavItem" active="{{ foundationsActive }}" on-click="{{ goFoundations }}" hint-size="100%,40px">Foundations — grammar &amp; sounds</x-import>
+      <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.NavItem" active="{{ vocabActive }}" on-click="{{ goVocab }}" hint-size="100%,40px">Numbers &amp; 1000 words</x-import>
+      <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--txt3); padding: 14px 12px 8px;">Conversations</div>
+      <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="5">
+        <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.NavItem" active="{{ nav.active }}" on-click="{{ nav.onSelect }}" hint-size="100%,40px">{{ nav.label }}</x-import>
+      </sc-for>
+      <div style="margin-top: 14px; padding: 0 12px; font-family: var(--font-mono); font-size: 11px; color: var(--txt3);">{{ loadedCount }} / {{ totalPlanned }} dialogues loaded</div>
+    </div>
+    </sc-if>
+    <div ref="{{ mainRef }}" style="flex: 1; overflow-y: auto;" data-screen-label="Content view">
+      <div style="max-width: 760px; margin: 0 auto; padding: {{ contentPad }};">
+        <sc-if value="{{ noFrVoice }}" hint-placeholder-val="{{ false }}">
+          <div style="background: rgba(230,190,85,.12); border: 1px solid rgba(230,190,85,.35); border-radius: 14px; padding: 12px 15px; margin-bottom: 18px; font-size: 12.5px; line-height: 1.45; color: var(--hold);">Audio normally streams a native French voice online, but it couldn't load just now. Check your connection, or install a "French — France" voice in your system speech settings for offline playback.</div>
+        </sc-if>
+        <sc-if value="{{ showFoundations }}" hint-placeholder-val="{{ true }}">
+          <div data-screen-label="Foundations">
+            <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--txt3);">Start here · Master this first</div>
+            <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -.01em; margin: 7px 0 3px; line-height: 1.12;">Grammar and pronunciation basics</h1>
+            <div style="font-size: 13.5px; color: var(--txt2); line-height: 1.45;">Everything below is reused in every dialogue. Work through it once, then start conversation 01. Tap any French word to hear it.</div>
+            <div style="background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin-top: 22px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 4px;">Step 1 · How to read the "Say it" guides</div>
+              <div style="font-size: 13px; color: var(--txt2); line-height: 1.45; margin-bottom: 12px;">Each line shows a simple sound-by-sound guide like <span style="font-family: var(--font-mono); color: var(--accent-ink);">bohn-ZHOOR</span>. Hyphens split the syllables. Read it like English — no special training needed.</div>
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 7px 14px; font-size: 12.5px; line-height: 1.45;">
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">CAPITALS</div><div style="color: var(--txt2);">the syllable you say a little louder — bohn-ZHOOR</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">zh</div><div style="color: var(--txt2);">like the s in "plea<b>s</b>ure"</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">ay · eh · oh</div><div style="color: var(--txt2);">like "say", "bed", "go"</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">oo</div><div style="color: var(--txt2);">like "food"</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">ew</div><div style="color: var(--txt2);">the French u — say "ee" with rounded lips</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">uh</div><div style="color: var(--txt2);">like the a in "about"</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">ahn · ohn · an</div><div style="color: var(--txt2);">nasal sounds — let the air out through your nose, don't say the n</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-ink); font-weight: 700;">r</div><div style="color: var(--txt2);">a soft gargle from the back of the throat — never rolled</div>
+              </div>
+            </div>
+            <div style="margin-top: 22px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;">Step 2 · The sounds to master</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ soundDrills }}" as="sd" hint-placeholder-count="8">
+                  <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px;">
+                      <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-ink); background: rgba(168,224,57,.12); border-radius: 5px; padding: 2px 7px; flex-shrink: 0;">{{ sd.k }}</span>
+                      <span style="font-size: 14.5px; font-weight: 700;">{{ sd.t }}</span>
+                    </div>
+                    <div style="font-size: 13px; color: var(--txt2); line-height: 1.45; margin-top: 6px;">{{ sd.d }}</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                      <sc-for list="{{ sd.ex }}" as="ex" hint-placeholder-count="3">
+                        <button onClick="{{ ex.play }}" style="display: flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; background: var(--bg2); border: 1px solid var(--line); color: var(--txt); cursor: pointer; font-family: var(--font-ui); font-size: 13px; font-weight: 700;" style-hover="border-color: rgba(255,255,255,.16);">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                          <span>{{ ex.fr }}</span>
+                          <span style="font-family: var(--font-mono); font-size: 11.5px; font-weight: 400; color: var(--txt3);">{{ ex.phon }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top: 22px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;">Step 3 · Core grammar</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ grammarCards }}" as="gc" hint-placeholder-count="5">
+                  <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;">
+                    <div style="font-size: 14.5px; font-weight: 700;">{{ gc.title }}</div>
+                    <div style="font-size: 12.5px; color: var(--txt2); line-height: 1.45; margin-top: 4px; margin-bottom: 10px;">{{ gc.note }}</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <sc-for list="{{ gc.rows }}" as="gr" hint-placeholder-count="4">
+                        <div style="display: flex; align-items: flex-start; gap: 10px; padding-top: 8px; border-top: 1px solid var(--line);">
+                          <button onClick="{{ gr.play }}" title="Listen" style="width: 26px; height: 26px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--bg2); border: 1px solid var(--line); color: var(--accent-ink);" style-hover="border-color: rgba(255,255,255,.16);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                          </button>
+                          <div style="flex: 1;">
+                            <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+                              <span style="font-size: 14px; font-weight: 700;">{{ gr.fr }}</span>
+                              <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--txt3);">{{ gr.phon }}</span>
+                            </div>
+                            <div style="font-size: 12.5px; color: var(--txt2); margin-top: 2px;">{{ gr.en }}</div>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top: 24px; display: flex; align-items: center; gap: 14px;">
+              <x-import component-from-global-scope="GrowMoneyMindsetDesignSystem_5cab65.Button" on-click="{{ goStart }}" hint-size="220px,40px">Start conversation 01</x-import>
+              <span style="font-size: 12.5px; color: var(--txt3);">Come back here any time from the sidebar.</span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showVocab }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Numbers and words">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--txt3);">Memorize · Understand · Master</div>
+                <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -.01em; margin: 7px 0 3px; line-height: 1.12;">Numbers and the essential words</h1>
+                <div style="font-size: 13.5px; color: var(--txt2); line-height: 1.45;">The words that carry everyday French. Tap any word to hear it.</div>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--txt3); white-space: nowrap; padding-bottom: 4px;">{{ vocabCount }} / {{ vocabTotal }} words loaded</div>
+            </div>
+            <div style="margin-top: 22px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;">Numbers</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ numberGroups }}" as="ng" hint-placeholder-count="6">
+                  <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;">
+                    <div style="font-size: 14.5px; font-weight: 700;">{{ ng.title }}</div>
+                    <div style="font-size: 12.5px; color: var(--txt2); line-height: 1.45; margin-top: 4px; margin-bottom: 10px;">{{ ng.note }}</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                      <sc-for list="{{ ng.rows }}" as="nr" hint-placeholder-count="6">
+                        <button onClick="{{ nr.play }}" style="display: flex; align-items: baseline; gap: 7px; padding: 6px 11px; border-radius: 999px; background: var(--bg2); border: 1px solid var(--line); color: var(--txt); cursor: pointer; font-family: var(--font-ui); font-size: 13px; font-weight: 700;" style-hover="border-color: rgba(255,255,255,.16);">
+                          <span>{{ nr.fr }}</span>
+                          <span style="font-family: var(--font-mono); font-size: 11.5px; font-weight: 400; color: var(--accent-ink);">{{ nr.en }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top: 22px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;">Word bank</div>
+              <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px; margin-bottom: 10px;">
+                <div style="font-size: 14.5px; font-weight: 700;">Genders — every noun is m or f</div>
+                <div style="font-size: 12.5px; color: var(--txt2); line-height: 1.45; margin-top: 4px; margin-bottom: 10px;">Each noun below carries an <span style="font-family: var(--font-mono); font-weight: 700; color: var(--txt2);">m</span> or <span style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-ink);">f</span> tag. The gender decides which little words go around it — always memorize the noun together with its article.</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <sc-for list="{{ genderRows }}" as="gr" hint-placeholder-count="3">
+                    <div style="display: flex; align-items: flex-start; gap: 10px; padding-top: 8px; border-top: 1px solid var(--line);">
+                      <button onClick="{{ gr.play }}" title="Listen" style="width: 26px; height: 26px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--bg2); border: 1px solid var(--line); color: var(--accent-ink);" style-hover="border-color: rgba(255,255,255,.16);">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                      </button>
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+                          <span style="font-size: 14px; font-weight: 700;">{{ gr.fr }}</span>
+                          <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--txt3);">{{ gr.phon }}</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: var(--txt2); margin-top: 2px;">{{ gr.en }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ vocabCats }}" as="vc" hint-placeholder-count="8">
+                  <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 11px;">
+                      <span style="font-size: 14.5px; font-weight: 700;">{{ vc.title }}</span>
+                      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--txt3);">{{ vc.count }} words</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px;">
+                      <sc-for list="{{ vc.words }}" as="w" hint-placeholder-count="12">
+                        <button onClick="{{ w.play }}" title="{{ w.phon }}" style="text-align: left; padding: 8px 11px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--line); cursor: pointer; font-family: var(--font-ui); color: var(--txt);" style-hover="border-color: rgba(168,224,57,.4);">
+                          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 6px;">
+                            <span style="font-size: 13px; font-weight: 700; line-height: 1.3;">{{ w.fr }}</span>
+                            <sc-if value="{{ w.hasG }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-family: var(--font-mono); font-size: 10px; font-weight: 700; flex-shrink: 0; padding: 1px 5px; border-radius: 5px; background: {{ w.gBg }}; color: {{ w.gColor }};">{{ w.g }}</span>
+                            </sc-if>
+                          </div>
+                          <div style="font-size: 11.5px; color: var(--txt2); line-height: 1.35; margin-top: 1px;">{{ w.en }}</div>
+                          <div style="font-family: var(--font-mono); font-size: 10.5px; color: var(--txt3); line-height: 1.35; margin-top: 2px;">{{ w.phon }}</div>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showConv }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Conversation view">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--txt3);">Conversation <span style="font-family: var(--font-mono);">{{ convNum }}</span> · Beginner</div>
+                <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -.01em; margin: 7px 0 3px; line-height: 1.12;">{{ convTitle }}</h1>
+                <div style="font-size: 15px; font-weight: 700; color: var(--accent-ink);">{{ convFr }}</div>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--txt3); white-space: nowrap; padding-bottom: 4px;">{{ revealedCount }} / {{ lineCount }} revealed</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 22px;">
+              <sc-for list="{{ lines }}" as="ln" hint-placeholder-count="7">
+                <div onClick="{{ ln.toggle }}" style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 13px 15px; cursor: pointer; animation: gmrise .3s ease-out both;" style-hover="border-color: rgba(255,255,255,.16);">
+                  <div style="display: flex; align-items: center; gap: 11px;">
+                    <span style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; background: {{ ln.chipBg }}; color: {{ ln.chipColor }};">{{ ln.speaker }}</span>
+                    <span style="font-size: 16.5px; font-weight: 700; line-height: 1.4; flex: 1;">{{ ln.fr }}</span>
+                    <button onClick="{{ ln.speak }}" title="Listen (native French voice)" style="width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: {{ ln.btnBg }}; border: 1px solid {{ ln.btnBorder }}; color: {{ ln.btnColor }};">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                    </button>
+                  </div>
+                  <sc-if value="{{ ln.revealed }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 7px;">
+                      <div style="font-size: 13.5px; color: var(--txt2); line-height: 1.45;">{{ ln.en }}</div>
+                      <sc-if value="{{ ln.showPhon }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; align-items: baseline; gap: 9px;">
+                          <span style="font-size: 9.5px; font-weight: 700; letter-spacing: .04em; color: var(--ink-on-lime); background: var(--lime); border-radius: 5px; padding: 2px 6px; flex-shrink: 0;">SAY IT</span>
+                          <span style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-ink); line-height: 1.5;">{{ ln.phon }}</span>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ ln.showIpa }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; align-items: baseline; gap: 9px;">
+                          <span style="font-size: 9.5px; font-weight: 700; letter-spacing: .04em; color: var(--txt3); background: var(--bg2); border-radius: 5px; padding: 2px 6px; flex-shrink: 0;">IPA</span>
+                          <span style="font-family: var(--font-mono); font-size: 12px; color: var(--txt3); line-height: 1.5;">{{ ln.ipa }}</span>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ ln.hidden }}" hint-placeholder-val="{{ true }}">
+                    <div style="margin-top: 9px; font-size: 11px; font-weight: 600; color: var(--txt3);">Tap to reveal the translation and how to say it</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top: 26px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;">TCF · Compréhension</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ quiz }}" as="qz" hint-placeholder-count="2">
+                  <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;">
+                    <div style="font-size: 14.5px; font-weight: 700; margin-bottom: 10px;">{{ qz.q }}</div>
+                    <div style="display: flex; flex-direction: column; gap: 7px;">
+                      <sc-for list="{{ qz.opts }}" as="op" hint-placeholder-count="3">
+                        <div onClick="{{ op.pick }}" style="padding: 9px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid {{ op.border }}; background: {{ op.bg }}; color: {{ op.color }};">{{ op.label }}</div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;revealMode&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;tap&quot;, &quot;options&quot;: [&quot;tap&quot;, &quot;always&quot;], &quot;tsType&quot;: &quot;'tap' | 'always'&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;showPhonetic&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;showIpa&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+class Component extends DCLogic {
+  state = { sel: -1, revealed: {}, allOn: false, quizPicks: {}, playing: null, convs: [], total: 50, numbers: [], vocab: [], vocabTotal: 1000 };
+
+  SOUND_DRILLS = [
+    { k: 'ahn', t: 'The nasal "an"', d: 'Say "ah" and let the air out through your nose — never pronounce the n.', ex: [['dans', 'dahn'], ['France', 'frahnss'], ['maintenant', 'mant-NAHN']] },
+    { k: 'ohn', t: 'The nasal "on"', d: 'Round your lips on "oh" and send it through the nose.', ex: [['bon', 'bohn'], ['bonjour', 'bohn-ZHOOR'], ['pardon', 'par-DOHN']] },
+    { k: 'an', t: 'The nasal "in"', d: 'Between "an" and "en", through the nose.', ex: [['vin', 'van'], ['matin', 'mah-TAN'], ['bien', 'bee-AN']] },
+    { k: 'ew', t: 'The French u', d: 'Say "ee", then round your lips like "oo" without moving your tongue.', ex: [['tu', 'tew'], ['salut', 'sah-LEW'], ['une', 'ewn']] },
+    { k: 'oo', t: 'The "ou"', d: 'Like "food" — this one is easy. Just don\'t mix it up with ew.', ex: [['vous', 'voo'], ['jour', 'zhoor'], ['beaucoup', 'boh-KOO']] },
+    { k: 'r', t: 'The French r', d: 'A soft gargle at the back of the throat — gentle, never rolled.', ex: [['merci', 'mehr-SEE'], ['Paris', 'pah-REE'], ['très', 'treh']] },
+    { k: 'silent', t: 'Silent last letters', d: 'Final s, t, d, x and z are usually not pronounced.', ex: [['petit', 'puh-TEE'], ['français', 'frahn-SEH'], ['vous', 'voo']] },
+    { k: 'liaison', t: 'Liaison', d: 'A silent final consonant is spoken when the next word starts with a vowel.', ex: [['vous avez', 'voo zah-VAY'], ['les amis', 'lay zah-MEE'], ['un homme', 'uhn UM']] },
+    { k: 'wah', t: 'The "oi"', d: 'Written oi, always said "wah".', ex: [['moi', 'mwah'], ['trois', 'trwah'], ['au revoir', 'oh ruh-VWAHR']] },
+    { k: 'oh', t: '"au" and "eau"', d: 'Both spellings are one clean "oh".', ex: [['eau', 'oh'], ['gauche', 'gohsh'], ['beaucoup', 'boh-KOO']] },
+    { k: 'ay / eh', t: 'The accents: é vs è, ê', d: 'é and -er/-ez endings sound like "say"; è, ê and ai sound like "bed".', ex: [['café', 'kah-FAY'], ['très', 'treh'], ['fenêtre', 'fuh-NET-ruh']] },
+    { k: 'sh · ny · y', t: '"ch", "gn" and "ill"', d: 'ch = sh, gn = the ny in "canyon", ill = y.', ex: [['chaud', 'shoh'], ['montagne', 'mohn-TAH-nyuh'], ['fille', 'feey']] },
+    { k: 'h', t: 'The silent h', d: 'French h is never pronounced.', ex: [['hôtel', 'oh-TEL'], ['heure', 'uhr'], ['homme', 'um']] },
+  ];
+
+  GRAMMAR = [
+    { title: 'Tu or vous?', note: 'In shops, hotels and with strangers, always use vous.', rows: [
+      ['Tu viens souvent ici ?', 'Do you come here often? — friends and family', 'tew vee-AN soo-VAHN ee-SEE?'],
+      ['Vous avez une table ?', 'Do you have a table? — polite, formal', 'voo zah-VAY ewn TAH-bluh?'] ] },
+    { title: 'Three ways to ask a question', note: 'All three are correct — plain intonation is the most common in speech.', rows: [
+      ['Vous avez du lait ?', 'Just raise your voice at the end.', 'voo zah-VAY dew LEH?'],
+      ['Est-ce que vous avez du lait ?', 'Put "est-ce que" in front.', 'ess-kuh voo zah-VAY dew LEH?'],
+      ['Avez-vous du lait ?', 'Flip the verb — more formal.', 'ah-vay-VOO dew LEH?'] ] },
+    { title: 'Five verbs that carry every dialogue', note: 'Learn these present-tense forms first.', rows: [
+      ['je suis · vous êtes', 'I am · you are (être)', 'zhuh SWEE · voo ZET'],
+      ["j'ai · vous avez", 'I have · you have (avoir)', 'zhay · voo zah-VAY'],
+      ['je voudrais', 'I would like — the polite magic word (vouloir)', 'zhuh voo-DREH'],
+      ['je peux · vous pouvez', 'I can · you can (pouvoir)', 'zhuh PUH · voo poo-VAY'],
+      ['je vais · on va', 'I go · we go (aller)', 'zhuh VEH · ohn VAH'] ] },
+    { title: 'Polite essentials', note: 'These phrases appear in every single conversation.', rows: [
+      ["s'il vous plaît", 'please', 'seel voo PLEH'],
+      ['merci beaucoup', 'thank you very much', 'mehr-SEE boh-KOO'],
+      ['excusez-moi', 'excuse me', 'ex-kew-zay-MWAH'],
+      ['je voudrais…', 'I would like…', 'zhuh voo-DREH'],
+      ['volontiers', 'gladly', 'voh-lohn-tee-AY'],
+      ['désolé', 'sorry', 'day-zoh-LAY'] ] },
+    { title: 'Prices and quantities', note: 'Numbers are everywhere in the TCF listening test.', rows: [
+      ['Combien ça coûte ?', 'How much does it cost?', 'kohm-bee-AN sah KOOT?'],
+      ['Ça fait trois euros.', 'That comes to three euros.', 'sah feh trwah zuh-ROH'],
+      ['un kilo de pommes', 'a kilo of apples', 'uhn kee-LOH duh PUM'],
+      ["une douzaine d'œufs", 'a dozen eggs', 'ewn doo-ZEN DUH'] ] },
+    { title: 'Articles and gender', note: 'Every French noun is masculine (un/le) or feminine (une/la). Learn each noun with its article.', rows: [
+      ['un café · une table', 'a coffee (m) · a table (f)', 'uhn kah-FAY · ewn TAH-bluh'],
+      ['le train · la gare', 'the train · the station', 'luh TRAN · lah GAHR'],
+      ['les billets', 'the tickets — les for all plurals', 'lay bee-YEH'],
+      ['du pain · de la salade', 'some bread · some salad', 'dew PAN · duh lah sah-LAHD'] ] },
+    { title: 'Saying no — negation', note: 'Wrap the verb in ne … pas.', rows: [
+      ['Je ne sais pas.', "I don't know.", 'zhuh nuh seh PAH'],
+      ["Ce n'est pas grave.", "It's not serious — no worries.", 'suh neh pah GRAHV'],
+      ["Il n'y a pas de wifi.", 'There is no wifi.', 'eel nee-YAH pah duh wee-FEE'] ] },
+    { title: 'My and your', note: 'Possessives match the noun, not the owner.', rows: [
+      ['mon billet · ma valise · mes sacs', 'my ticket · my suitcase · my bags', 'mohn bee-YEH · mah vah-LEEZ · may SAHK'],
+      ['votre chambre · vos clés', 'your room · your keys (polite)', 'VOH-truh SHAHM-bruh · voh KLAY'] ] },
+    { title: '"Il y a" and "c\'est"', note: 'The two workhorses: "there is" and "it is".', rows: [
+      ['Il y a une piscine ?', 'Is there a pool?', 'eel-YAH ewn pee-SEEN?'],
+      ["C'est loin ?", 'Is it far?', 'seh LWAN?'],
+      ["C'est ça.", "That's right.", 'seh SAH'] ] },
+    { title: 'Telling the time', note: 'France uses the 24-hour clock for schedules.', rows: [
+      ['Quelle heure est-il ?', 'What time is it?', 'kel UHR eh-TEEL?'],
+      ['Il est neuf heures et demie.', "It's nine thirty.", 'eel eh nuh VUHR ay duh-MEE'],
+      ['À quelle heure… ?', 'At what time…?', 'ah kel UHR'],
+      ['de sept heures à dix heures', 'from seven to ten', 'duh set UHR ah dee ZUHR'] ] },
+    { title: 'Days of the week', note: '"Le" before a day means "every": le samedi = on Saturdays.', rows: [
+      ['lundi · mardi · mercredi · jeudi', 'Monday · Tuesday · Wednesday · Thursday', 'luhn-DEE · mar-DEE · mehr-kruh-DEE · zhuh-DEE'],
+      ['vendredi · samedi · dimanche', 'Friday · Saturday · Sunday', 'vahn-druh-DEE · sahm-DEE · dee-MAHNSH'],
+      ['le samedi', 'on Saturdays', 'luh sahm-DEE'] ] },
+  ];
+
+  GENDER_OVERRIDES = { "l'eau": 'f', "l'école": 'f', "l'hôpital": 'm', "l'hôtel": 'm', "l'aéroport": 'm', "l'église": 'f', "l'avion": 'm', "l'ascenseur": 'm', "l'escalier": 'm', "l'argent": 'm', "l'après-midi": 'm', "l'année": 'f', 'les pâtes': 'f', 'les toilettes': 'f', 'les gens': 'm', 'les soldes': 'm' };
+
+  genderOf(fr) {
+    const s = fr.toLowerCase();
+    if (/^(le |un )/.test(s)) return 'm';
+    if (/^(la |une )/.test(s)) return 'f';
+    return this.GENDER_OVERRIDES[s.replace(/ ·.*$/, '')] || null;
+  }
+
+  GENDER_GUIDE = [
+    ['un petit café · le café est chaud', 'masculine (m) — use un, le, mon, ce; adjectives stay in their base form', 'uhn puh-TEE kah-FAY · luh kah-FAY eh SHOH'],
+    ['une petite table · la table est chaude', 'feminine (f) — use une, la, ma, cette; most adjectives add an -e', 'ewn puh-TEET TAH-bluh · lah TAH-bluh eh SHOHD'],
+    ['les cafés · des tables · mes clés', 'plural — les, des and mes work for both genders', 'lay kah-FAY · day TAH-bluh · may KLAY'],
+  ];
+
+  componentDidMount() {
+    this._mq = window.matchMedia('(max-width: 720px)');
+    this.setState({ mobile: this._mq.matches });
+    this._mq.addEventListener('change', (e) => this.setState({ mobile: e.matches }));
+    import('./fr-data-index.js').then(m => this.setState({ convs: m.ALL, total: m.TOTAL_PLANNED }));
+    import('./vocab-data.js').then(m => this.setState({ numbers: m.NUMBERS, vocab: m.VOCAB, vocabTotal: m.VOCAB_TOTAL }));
+    this._loadVoices();
+    if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => this._loadVoices();
+  }
+
+  _loadVoices() {
+    const all = window.speechSynthesis?.getVoices() || [];
+    // STRICT: only voices whose language is French — never fall back to a non-French voice.
+    const fr = all.filter(v => /^fr([-_]|$)/i.test(v.lang || ''));
+    const score = (v) => {
+      let s = 0;
+      if (/natural|neural|online|premium|enhanced/i.test(v.name)) s += 4; // neural voices sound native
+      if (/google/i.test(v.name)) s += 3;
+      if (/^fr[-_]fr$/i.test(v.lang)) s += 2; // France French first
+      if (v.localService === false) s += 1;
+      return s;
+    };
+    const ranked = [...fr].sort((a, b) => score(b) - score(a));
+    const FEMALE = /denise|elo[iï]se|vivienne|jos[ée]phine|am[ée]lie|audrey|marie|c[ée]line|virginie|julie|charlotte|yvette|aurelie|l[ée]a|female|femme|google fran/i;
+    const MALE = /henri|claude|thomas|nicolas|paul|r[ée]my|maurice|j[ée]r[ôo]me|alain|daniel|male|homme/i;
+    this._femaleVoice = ranked.find(v => FEMALE.test(v.name)) || ranked.find(v => !MALE.test(v.name)) || ranked[0] || null;
+    this._maleVoice = ranked.find(v => MALE.test(v.name)) || ranked.find(v => v !== this._femaleVoice) || this._femaleVoice || null;
+    this._hasFr = ranked.length > 0;
+    if (this.state.noFrVoice !== !this._hasFr) this.setState({ noFrVoice: !this._hasFr });
+  }
+
+  _stopAudio() {
+    if (this._audio) { this._audio.onended = this._audio.onerror = null; this._audio.pause(); this._audio = null; }
+    window.speechSynthesis?.cancel();
+  }
+
+  speak(key, text, male, phon) {
+    this._stopAudio();
+    if (this.state.playing === key) { this.setState({ playing: null }); return; }
+    this.setState({ playing: key });
+    const done = () => this.setState({ playing: null });
+    if (!this._hasFr) this._loadVoices();
+    // Prefer a high-quality neural French browser voice when one exists…
+    const v = male ? this._maleVoice : this._femaleVoice;
+    const neural = v && /natural|neural|online|premium|enhanced|google/i.test(v.name);
+    if (neural) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'fr-FR'; u.voice = v; u.rate = 0.85;
+      if (male && this._maleVoice === this._femaleVoice) u.pitch = 0.78;
+      u.onend = done; u.onerror = done;
+      window.speechSynthesis.speak(u);
+      return;
+    }
+    // …otherwise stream natural native-French audio (Google TTS), same voice for all speakers.
+    const clean = text.replace(/[«»]/g, '').trim();
+    const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=fr&ttsspeed=0.9&q=' + encodeURIComponent(clean));
+    this._audio = a;
+    a.onended = done;
+    a.onerror = () => {
+      // Network blocked: last resort — local French voice, else speak the phonetic guide.
+      this._audio = null;
+      if (!this._hasFr && !this.state.audioFailed) this.setState({ audioFailed: true });
+      const u = new SpeechSynthesisUtterance(this._hasFr ? text : (phon || text).toLowerCase().replace(/-/g, ' ').replace(/[·|/]/g, ', '));
+      u.lang = this._hasFr ? 'fr-FR' : (navigator.language || 'en-US');
+      if (v) u.voice = v;
+      u.rate = 0.85; u.onend = done; u.onerror = done;
+      window.speechSynthesis?.speak(u);
+    };
+    a.play().catch(() => a.onerror && a.onerror());
+  }
+
+  renderVals() {
+    const sel = this.state.sel;
+    const convs = this.state.convs;
+    const conv = sel >= 0 ? convs[sel] : null;
+    const revealMode = this.props.revealMode ?? 'tap';
+    const showPhon = this.props.showPhonetic ?? true;
+    const showIpa = this.props.showIpa ?? false;
+    const all = this.state.allOn || revealMode === 'always';
+    const playing = this.state.playing;
+    let revealedCount = 0;
+    const lines = (conv ? conv.lines : []).map((l, i) => {
+      const key = sel + '-' + i;
+      const revealed = all || !!this.state.revealed[key];
+      if (revealed) revealedCount++;
+      const isPlaying = playing === key;
+      return {
+        speaker: l[0], fr: l[2], en: l[3], phon: l[4], ipa: l[5],
+        chipBg: l[1] ? 'rgba(168,224,57,.14)' : 'var(--bg2)',
+        chipColor: l[1] ? 'var(--accent-ink)' : 'var(--txt2)',
+        btnBg: isPlaying ? 'var(--lime)' : 'var(--bg2)',
+        btnBorder: isPlaying ? 'var(--lime)' : 'var(--line)',
+        btnColor: isPlaying ? 'var(--ink-on-lime)' : 'var(--accent-ink)',
+        revealed, hidden: !revealed, showPhon, showIpa,
+        toggle: () => this.setState(s => ({ revealed: { ...s.revealed, [key]: !revealed } })),
+        speak: (e) => { e.stopPropagation(); this.speak(key, l[2], false, l[4]); }, // always the native female French voice
+      };
+    });
+    const quiz = (conv ? conv.quiz : []).map((q, qi) => {
+      const qkey = sel + '-q' + qi;
+      const picked = this.state.quizPicks[qkey];
+      return {
+        q: q.q,
+        opts: q.opts.map((label, oi) => {
+          let bg = 'var(--bg2)', border = 'var(--line)', color = 'var(--txt)';
+          if (picked != null) {
+            if (oi === q.a) { bg = 'rgba(168,224,57,.14)'; border = 'rgba(168,224,57,.4)'; color = 'var(--accent-ink)'; }
+            else if (oi === picked) { bg = 'rgba(255,107,107,.12)'; border = 'rgba(255,107,107,.4)'; color = 'var(--down)'; }
+            else { color = 'var(--txt3)'; }
+          }
+          return { label, bg, border, color, pick: () => { if (picked == null) this.setState(s => ({ quizPicks: { ...s.quizPicks, [qkey]: oi } })); } };
+        }),
+      };
+    });
+    const goTo = (i) => { this.setState({ sel: i, allOn: false }); if (this._main) this._main.scrollTop = 0; };
+    return {
+      navItems: convs.map((c, i) => ({ label: c.title, active: i === sel, onSelect: () => goTo(i) })),
+      showSidebar: !this.state.mobile,
+      showChips: !!this.state.mobile,
+      topbarTitle: this.state.mobile ? 'French · TCF prep' : 'Daily conversation in French · TCF prep',
+      contentPad: this.state.mobile ? '18px 14px 48px' : '30px 24px 56px',
+      navChips: [
+        { label: 'Foundations', active: sel === -1, i: -1 },
+        { label: 'Numbers & words', active: sel === -2, i: -2 },
+        ...convs.map((c, i) => ({ label: String(i + 1).padStart(2, '0') + ' · ' + c.title, active: i === sel, i })),
+      ].map(ch => ({ label: ch.label, onSelect: () => goTo(ch.i),
+        bg: ch.active ? 'var(--lime)' : 'var(--bg2)',
+        color: ch.active ? 'var(--ink-on-lime)' : 'var(--txt2)',
+        border: ch.active ? 'var(--lime)' : 'var(--line)' })),
+      foundationsActive: sel === -1,
+      vocabActive: sel === -2,
+      goFoundations: () => goTo(-1),
+      goVocab: () => goTo(-2),
+      goStart: () => goTo(0),
+      showFoundations: sel === -1,
+      showVocab: sel === -2,
+      showConv: sel >= 0 && !!conv,
+      numberGroups: this.state.numbers.map((g, gi) => ({
+        title: g.title, note: g.note,
+        rows: g.rows.map((r, ri) => ({ fr: r[0], en: r[1], phon: r[2], play: (ev) => { ev.stopPropagation(); this.speak('n' + gi + '-' + ri, r[0], false, r[2]); } })),
+      })),
+      vocabCats: this.state.vocab.map((c, ci) => ({
+        title: c.title, count: String(c.words.length),
+        words: c.words.map((w, wi) => {
+          const g = this.genderOf(w[0]);
+          return { fr: w[0], en: w[1], phon: w[2], hasG: !!g, g: g || '',
+            gColor: g === 'f' ? 'var(--accent-ink)' : 'var(--txt2)',
+            gBg: g === 'f' ? 'rgba(168,224,57,.12)' : 'var(--bg0)',
+            play: (ev) => { ev.stopPropagation(); this.speak('v' + ci + '-' + wi, w[0], false, w[2]); } };
+        }),
+      })),
+      genderRows: this.GENDER_GUIDE.map((r, ri) => ({ fr: r[0], en: r[1], phon: r[2], play: (ev) => { ev.stopPropagation(); this.speak('gg' + ri, r[0], false, r[2]); } })),
+      vocabCount: String(this.state.vocab.reduce((n, c) => n + c.words.length, 0)),
+      vocabTotal: String(this.state.vocabTotal),
+      convNum: conv ? String(sel + 1).padStart(2, '0') : '',
+      convTitle: conv ? conv.title : '', convFr: conv ? conv.fr : '',
+      lines, quiz, revealedCount: String(revealedCount), lineCount: String(conv ? conv.lines.length : 0),
+      loadedCount: String(convs.length), totalPlanned: String(this.state.total),
+      noFrVoice: !!this.state.noFrVoice && !!this.state.audioFailed,
+      allOn: all,
+      toggleAll: () => this.setState(s => ({ allOn: !all, revealed: {} })),
+      mainRef: (el) => { this._main = el; },
+      soundDrills: this.SOUND_DRILLS.map((s, si) => ({
+        k: s.k, t: s.t, d: s.d,
+        ex: s.ex.map((e, ei) => ({ fr: e[0], phon: e[1], play: (ev) => { ev.stopPropagation(); this.speak('s' + si + '-' + ei, e[0], false, e[1]); } })),
+      })),
+      grammarCards: this.GRAMMAR.map((g, gi) => ({
+        title: g.title, note: g.note,
+        rows: g.rows.map((r, ri) => ({ fr: r[0], en: r[1], phon: r[2], play: (ev) => { ev.stopPropagation(); this.speak('g' + gi + '-' + ri, r[0], false, r[2]); } })),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

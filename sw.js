@@ -1,6 +1,6 @@
 // GMM Bilingual — offline mode.
 // Network-first: a fresh copy always wins online; when the connection drops, the saved copy opens instead.
-const CACHE = 'gmm-fr-v165';
+const CACHE = 'gmm-fr-v171';
 const SHELL = ['./', './index.html'];
 
 self.addEventListener('install', (e) => {
